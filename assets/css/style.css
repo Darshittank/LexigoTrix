@@ -1,0 +1,311 @@
+/* ─────────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────────── */
+    :root {
+      --bg:          #0d0d1a;
+      --surface:     #13132b;
+      --border:      #2a2a50;
+      --cell-bg:     #1a1a35;
+      --cell-hover:  #232348;
+      --text:        #c8c8f0;
+      --text-dim:    #6060a0;
+      --accent:      #7b6cf6;
+      --accent-glow: rgba(123,108,246,0.35);
+
+      /* Up to 6 word colors */
+      --color-w0: #f25f5c;   /* crimson   */
+      --color-w1: #43e97b;   /* emerald   */
+      --color-w2: #4fc3f7;   /* sky       */
+      --color-w3: #ffd166;   /* amber     */
+      --color-w4: #c77dff;   /* violet    */
+      --color-w5: #ff9a3c;   /* tangerine */
+
+      --radius:    10px;
+      --cell-size: min(44px, 8.5vw);
+      --gap:       4px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ── Header ── */
+    header { text-align: center; margin-bottom: 2rem; }
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      background: linear-gradient(120deg, #a78bfa, #7b6cf6 40%, #4fc3f7 70%, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p {
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    /* ── 10×10 CSS Grid ── */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(10, var(--cell-size));
+      grid-template-rows:    repeat(10, var(--cell-size));
+      gap: var(--gap);
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      -webkit-touch-callout: none;
+    }
+
+    /* ── Cell base ── */
+    .cell {
+      width:  var(--cell-size);
+      height: var(--cell-size);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.75rem, 2vw, 1rem);
+      font-weight: 500;
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      cursor: crosshair;
+      position: relative;
+      transition:
+        background 0.12s ease,
+        border-color 0.12s ease,
+        box-shadow 0.12s ease,
+        transform 0.12s ease,
+        color 0.12s ease;
+    }
+
+    /* Coordinate tooltip on hover */
+    .cell:hover { border-color: var(--accent); }
+    .cell:hover::after {
+      content: attr(data-coord);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1e40;
+      color: var(--text-dim);
+      font-size: 0.6rem;
+      padding: 2px 5px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* ── Drag selection (live, pending) ── */
+    .cell.selecting {
+      background: rgba(123,108,246,0.28);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 8px var(--accent-glow);
+      transform: scale(1.08);
+      z-index: 2;
+    }
+
+    /* Brief red flash on wrong selection */
+    .cell.sel-invalid {
+      background: rgba(242,95,92,0.25);
+      border-color: #f25f5c;
+      color: #f25f5c;
+      animation: shake 0.3s ease;
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-3px); }
+      75%      { transform: translateX(3px); }
+    }
+
+    /* ── Permanent word-found highlights (0–5) ──
+       Each class mirrors the --color-wN token.
+       Pop animation staggered via --anim-delay.
+    ── */
+    .cell[class*="highlight-"] {
+      animation: pop 0.35s ease var(--anim-delay, 0ms) both;
+    }
+    .cell.highlight-0 { outline:3px solid var(--color-w0); background:rgba(242,95,92,0.18);   color:var(--color-w0); box-shadow:0 0 10px rgba(242,95,92,0.45);   }
+    .cell.highlight-1 { outline:3px solid var(--color-w1); background:rgba(67,233,123,0.18);  color:var(--color-w1); box-shadow:0 0 10px rgba(67,233,123,0.45);  }
+    .cell.highlight-2 { outline:3px solid var(--color-w2); background:rgba(79,195,247,0.18);  color:var(--color-w2); box-shadow:0 0 10px rgba(79,195,247,0.45);  }
+    .cell.highlight-3 { outline:3px solid var(--color-w3); background:rgba(255,209,102,0.18); color:var(--color-w3); box-shadow:0 0 10px rgba(255,209,102,0.45); }
+    .cell.highlight-4 { outline:3px solid var(--color-w4); background:rgba(199,125,255,0.18); color:var(--color-w4); box-shadow:0 0 10px rgba(199,125,255,0.45); }
+    .cell.highlight-5 { outline:3px solid var(--color-w5); background:rgba(255,154,60,0.18);  color:var(--color-w5); box-shadow:0 0 10px rgba(255,154,60,0.45);  }
+
+    /* Stabilise found cells under hover/drag */
+    .cell.highlight-0:hover,.cell.highlight-1:hover,.cell.highlight-2:hover,
+    .cell.highlight-3:hover,.cell.highlight-4:hover,.cell.highlight-5:hover { transform: none; }
+
+    @keyframes pop {
+      0%  { transform: scale(1);    }
+      45% { transform: scale(1.22); }
+      100%{ transform: scale(1);    }
+    }
+
+    /* ── Direction badge on cells (diagonal hint) ──
+       Small ↗ indicator rendered via data-dir attribute
+       only for diagonally-placed word cells, after reveal.
+    ── */
+    .cell.diag-hint::before {
+      content: attr(data-dir-icon);
+      position: absolute;
+      top: 1px; right: 2px;
+      font-size: 0.45rem;
+      opacity: 0.7;
+      line-height: 1;
+    }
+
+    /* ── Controls ── */
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    button {
+      padding: 0.55rem 1.4rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--cell-bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+    button:hover {
+      background: var(--cell-hover);
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    #btnReveal { background: var(--accent); border-color: var(--accent); color: #fff; }
+    #btnReveal:hover { background: #6a5de0; border-color: #6a5de0; }
+
+    /* ── Status ── */
+    #status {
+      min-height: 1.6rem;
+      font-size: 0.8rem;
+      text-align: center;
+      letter-spacing: 0.04em;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+    #status.found { color: #a78bfa; }
+
+    /* ── Legend ── */
+    .legend-title {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+      text-align: center;
+    }
+    #spellLegend { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;}
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.28rem 0.7rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--cell-bg);
+      transition: opacity 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .legend-item.pending { opacity: 0.4; }
+    .legend-item.found-item {
+      border-color: var(--item-color);
+      box-shadow: 0 0 8px var(--item-color);
+      opacity: 1;
+    }
+    /* Small direction badge in legend */
+    .legend-item .dir-tag {
+      font-size: 0.6rem;
+      opacity: 0.6;
+      margin-left: 2px;
+    }
+    .legend-swatch {
+      width: 9px; height: 9px;
+      border-radius: 2px; flex-shrink: 0;
+    }
+
+    /* ── Score bar ── */
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 1rem;
+    }
+    #foundCount { color: var(--accent); font-weight: 700; font-size: 0.9rem; }
+
+    /* ── Victory banner ── */
+    #victory {
+      display: none;
+      text-align: center;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      background: rgba(123,108,246,0.15);
+      border: 1px solid var(--accent);
+      font-size: 0.85rem;
+      color: #a78bfa;
+      letter-spacing: 0.1em;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+
+    footer {
+      margin-top: 2.5rem;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-align: center;
+    }
+    footer a{
+      color: var(--color-w3);
+      transition: all 0.3s ease-in-out;
+    }
+    footer a:hover{
+      color: var(--color-w5);
+      transition: all 0.3s ease-in-out;
+    }
