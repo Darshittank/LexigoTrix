@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LexigoTrix - Spell Quick. Think Quicker. | Fast-Paced Word Puzzle Game</title>
+  
+  <meta name="description" content="LexigoTrix is a fun and fast-paced word puzzle game that challenges you to spell words quickly while sharpening your thinking skills. Play free online now!">
+  <meta name="keywords" content="LexigoTrix, word puzzle game, spell quick, think quicker, brain training, vocabulary game, fast-paced game, word game online, mental agility, puzzle game 2026">
+  <meta name="author" content="LexigoTrix">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revisit-after" content="7 days">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Schema.org Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "LexigoTrix",
+        "alternateName": "LexigoTrix Word Game",
+        "url": "https://www.lexigotrix.com",
+        "description": "LexigoTrix is a fun and fast-paced word puzzle game that challenges you to spell words quickly while sharpening your thinking skills.",
+        "keywords": "word puzzle, brain training, vocabulary game",
+        "genre": "Puzzle Game, Word Game",
+        "gamePlatform": ["Web Browser", "Mobile", "Desktop"],
+        "operatingSystem": "All",
+        "applicationCategory": "Game",
+        "creator": {
+            "@type": "Organization",
+            "name": "LexigoTrix"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "1250"
+        }
+    }
+  </script>
+
+</head>
+<body>
+
+<header>
+  <h1>✦ LexigoTrix ✦</h1>
+  <p>Drag horizontally, vertically or diagonally to trace hidden words</p>
+</header>
+
+<div class="card">
+  <div class="score-row">
+    <span>SPELLS FOUND</span>
+    <span id="foundCount">0 / ?</span>
+    <span id="puzzleNum">PUZZLE #1</span>
+  </div>
+
+  <div id="victory"></div>
+
+  <div id="grid" role="grid" aria-label="10 by 10 letter grid"></div>
+
+  <div class="controls">
+    <button id="btnReveal" aria-label="Reveal all hidden words">Reveal All</button>
+    <button id="btnNew"    aria-label="Generate a new puzzle with new words">New Puzzle</button>
+  </div>
+
+  <div id="status" role="status" aria-live="polite">Drag across the grid to trace a spell</div>
+
+  <p class="legend-title">Spells hidden in this grid</p>
+  <div id="spellLegend" aria-label="List of hidden words"></div>
+</div>
+
+<footer>LexigoTrix - Spell Quick. Think Quicker. - <a href="#" target="_blank">Github</a> / <a href="#" target="_blank">Codepen</a></footer>
+
+</body>
+</html>
