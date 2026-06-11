@@ -22,6 +22,10 @@
 - 🏆 **Score system** - Track your progress
 - 🔄 **Endless replayability** - New challenges every time
 
+## 📸 Preview
+
+![Preview](assets/screenshot_1.png)
+
 ## 🎮 **How to Play**
 
 1. **Form Words** - Use the given letters to create valid English words
